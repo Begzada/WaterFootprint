@@ -1,29 +1,36 @@
 import '@app/styles/global.css';
+import React, {useCallback, useRef, useState} from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
 import Accordion from 'app/components/Accordion';
 import Button from 'app/components/Button';
 import InfoCard from 'app/components/InfoCard';
 import QuestionForm from 'app/components/QuestionForm';
-import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {SafeAreaView, ScrollView, Text, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import Map from 'app/components/Map';
 
-const color = '[#5724E8]';
+const color = '#5724E8';
 
 function App(): React.JSX.Element {
   const [result, setResult] = useState<number | null>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
 
-  const toggleSheet = useCallback(() => {
-    if (bottomSheetRef.current) {
-      if (isOpen) {
-        bottomSheetRef.current.forceClose();
-      } else {
-        bottomSheetRef.current.snapToIndex(0);
+  const toggleSheet = useCallback(
+    (total?: number | null) => {
+      if (bottomSheetRef.current) {
+        if (isOpen) {
+          bottomSheetRef.current.forceClose();
+        } else {
+          bottomSheetRef.current.snapToIndex(0);
+        }
       }
-    }
-  }, [bottomSheetRef, isOpen]);
+      if (total) {
+        setResult(total);
+      }
+    },
+    [bottomSheetRef, isOpen],
+  );
 
   const handleSheetChanges = useCallback((index: number) => {
     if (index === 0) {
@@ -37,8 +44,8 @@ function App(): React.JSX.Element {
     <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaView className="flex-1">
         <ScrollView className="flex-1" contentContainerClassName="pb-[50px]">
-          <View className={'bg-[#5724E8'} />
-          <View className="flex h-[500px] w-full bg-black" />
+          <View className={'bg-[#5724E8]'} />
+          <Map />
           <View className="flex w-full px-[13px] py-[40px] gap-y-3">
             <Text className="text-black text-xl font-semibold">
               Secilen bolgenin adi
@@ -47,24 +54,28 @@ function App(): React.JSX.Element {
               <InfoCard color={color} title="Doluluk orani" value="50%" />
               <InfoCard color={color} title="Doluluk orani" value="50%" />
             </View>
-            <InfoCard long color={color} title="Doluluk orani" value="50%" />
+            <InfoCard
+              outline
+              long
+              color={color}
+              title="Doluluk orani"
+              value="50%"
+            />
 
             <View className="flex-col mt-[40px] gap-y-3">
-              <Text className="text-black text-xl font-semibold">
-                Kendi ayak izini hesapla
-              </Text>
-
-              {result && (
+              {result ? (
                 <InfoCard
                   long
-                  outline
-                  color="purple-500"
-                  title="Doluluk orani"
-                  value="50%"
+                  color="#3B82F6"
+                  title="Your water usage"
+                  value={`${result} Lt/day`}
+                />
+              ) : (
+                <Button
+                  title="Calculate water footprint"
+                  onPress={toggleSheet}
                 />
               )}
-
-              <Button title="Hesapla" onPress={toggleSheet} />
             </View>
 
             <View className="flex-col mt-[40px] gap-y-3">

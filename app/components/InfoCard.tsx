@@ -19,30 +19,34 @@ const InfoCard: FC<Props> = ({title, value, long, outline, color}) => {
     classNames.push('flex-col', 'aspect-square');
   }
 
-  if (color) {
-    if (outline) {
-      textClassNames.push(`text-${color}`);
-    } else {
-      classNames.push(`bg-${color}`);
-      textClassNames.push('text-white');
-    }
-  }
-
   const titleClassNames = [...textClassNames, 'flex-1', 'text-xl'];
-  const valueClassNames = [
-    ...textClassNames,
-    'text-[64px]',
-    'text-right',
-    'h-[72px]',
-  ];
+  const valueClassNames = [...textClassNames, 'text-right', 'self-end'];
 
   return (
     <View
-      className={`flex-1 ${outline ? `border border-${color}` : ''}`}
-      style={{borderRadius: 12, overflow: 'hidden'}}>
+      className={`${long ? 'w-full' : 'flex-1'} ${outline ? 'border' : ''}`}
+      style={{
+        borderRadius: 12,
+        overflow: 'hidden',
+        borderColor: outline ? color : undefined,
+        backgroundColor: !outline ? color : undefined,
+      }}>
       <View className={classNames.join(' ')}>
-        <Text className={titleClassNames.join(' ')}>{title}</Text>
-        <Text className={valueClassNames.join(' ')}>{value}</Text>
+        <Text
+          className={titleClassNames.join(' ')}
+          style={{color: outline ? color : 'white'}}>
+          {title}
+        </Text>
+        <Text
+          className={valueClassNames.join(' ')}
+          style={{
+            color: outline ? color : 'white',
+            fontSize: value
+              ? parseInt((64 / ((value.length % 3) + 1)).toFixed(0), 10)
+              : 10,
+          }}>
+          {value}
+        </Text>
       </View>
     </View>
   );
