@@ -42,7 +42,7 @@ const InfoCard: FC<Props> = ({title, value, long, outline, color}) => {
           style={{
             color: outline ? color : 'white',
             fontSize: value
-              ? parseInt((64 / ((value.length % 3) + 1)).toFixed(0), 10)
+              ? parseInt((64 / (value.length / 10 + 1)).toFixed(0), 10)
               : 10,
           }}>
           {value}

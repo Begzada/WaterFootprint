@@ -58,6 +58,59 @@ const QUESTIONS_ANSWERS = [
       {title: '3+ times', value: 3},
     ],
   },
+  {
+    question: 'How many times do you take a shower in a week?',
+    answers: [
+      {title: '0-2 times', value: 1},
+      {title: '2-4 times', value: 3},
+      {title: '4-7 times', value: 5},
+      {title: '7+ times', value: 7},
+    ],
+  },
+  {
+    question: 'How long does a shower take?',
+    answers: [
+      {title: '0-10 min.', value: 120},
+      {title: '10-20 min.', value: 240},
+      {title: '20-30 min.', value: 360},
+      {title: '30-40 min.', value: 480},
+      {title: '40+ min.', value: 500},
+    ],
+  },
+  {
+    question: 'Do you wash dishes by hand or in the machine?',
+    answers: [
+      {title: 'Handwash', value: 130},
+      {title: 'Dishwasher', value: 15},
+    ],
+  },
+  {
+    question: 'How many times do you wash them in  a week?',
+    answers: [
+      {title: '0-7 times', value: 3.5},
+      {title: '7-14 times', value: 10.5},
+      {title: '14-21 times', value: 17.5},
+      {title: '21+ times', value: 21},
+    ],
+  },
+  {
+    question: 'How many times do you consume meat in a month?',
+    answers: [
+      {title: '0-7 times', value: 3.5},
+      {title: '7-14 times', value: 10.5},
+      {title: '14-21 times', value: 17.5},
+      {title: '21+ times', value: 21},
+    ],
+  },
+  {
+    question: 'What is the amount of your meat consumption in a month?',
+    answers: [
+      {title: '0-5 kg', value: 2.5},
+      {title: '5-10 kg', value: 7.5},
+      {title: '10-20 kg', value: 15},
+      {title: '20+ kg', value: 20},
+    ],
+  },
 ];
 
 const calculateTotal = (answers: number[]) => {
@@ -65,7 +118,14 @@ const calculateTotal = (answers: number[]) => {
   const car = (answers[2] * 550) / 7;
   const tea = (answers[3] * answers[4]) / 3;
   const brushing = answers[5] * 15;
-  return washing + car + tea + brushing;
+  const shower = (answers[6] * answers[7]) / 7;
+  const dishwash = (answers[8] * answers[9]) / 7;
+  const meat = (9400 * answers[10] * answers[11]) / 30;
+  return Number(
+    ((washing + car + tea + brushing + shower + dishwash + meat) / 10).toFixed(
+      0,
+    ),
+  );
 };
 
 const QuestionForm: FC<Props> = ({onClose}) => {
@@ -74,6 +134,9 @@ const QuestionForm: FC<Props> = ({onClose}) => {
   const [total, setTotal] = useState<number | null>(null);
 
   const handleClose = () => {
+    setCurrentIndex(0);
+    setTotal(null);
+    answers.current = [];
     onClose(total);
   };
 
